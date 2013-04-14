@@ -31,7 +31,8 @@ public class DrawWin extends JFrame {
 	
 	private class RecognizeListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			setVisible(false);
+			dispose();
+			Shared.recognitionWin.loadImage();
 			Shared.recognitionWin.setVisible(true);
 		}
 	}
