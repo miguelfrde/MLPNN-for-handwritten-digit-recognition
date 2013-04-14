@@ -14,6 +14,7 @@ public class DrawPanel extends JPanel implements MouseMotionListener, MouseListe
 	private boolean p;
 	private boolean painting;
 	private int px, py;
+	private boolean[][] data;
 
 	public DrawPanel() {
 		setPreferredSize(new Dimension(280, 280));
@@ -23,8 +24,13 @@ public class DrawPanel extends JPanel implements MouseMotionListener, MouseListe
 		p = false;
 		painting = false;
 		px = 0; py = 0;
+		data = new boolean[280][280];
 		addMouseListener(this);
 		addMouseMotionListener(this);
+	}
+	
+	public boolean[][] getData() {
+		return data;
 	}
 
 	public void mousePressed(MouseEvent e) {
@@ -39,16 +45,29 @@ public class DrawPanel extends JPanel implements MouseMotionListener, MouseListe
 		if (painting && p) {
 			graphics.drawLine(x, y, x, y);
 			p = false;
-		} else if (painting)
-			graphics.drawLine(px,py,x,y);	
+		} else if (painting) {
+			/*int xmin = Math.min(px, x), ymin = Math.min(py, y);
+			int xmax = Math.max(px, x), ymax = Math.max(py, y);
+			for (int i = xmin; i < xmax; i++)
+				for (int j = ymin; j < ymax; j++)
+					data[i][j] = true;*/
+			graphics.drawLine(px,py,x,y);
+		}
 		px = x;
 		py = y;
+		if (painting) data[x][y] = true;
 	}
 	
-	public void mouseExited(MouseEvent e) {}
+	public void mouseExited(MouseEvent e) {
+		painting = false;
+	}
+	
+	public void mouseEntered(MouseEvent e) {
+		painting = true;
+	}
+	
 	public void mouseMoved(MouseEvent e) {}
 	public void mouseReleased(MouseEvent e) {}
-	public void mouseEntered(MouseEvent e) {}
 	public void mouseClicked(MouseEvent e) {}
 
 }
