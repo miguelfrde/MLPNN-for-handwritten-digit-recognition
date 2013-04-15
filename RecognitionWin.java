@@ -1,14 +1,17 @@
-import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 
 
 @SuppressWarnings("serial")
 public class RecognitionWin extends JFrame {
 	
-	private BufferedImage image = null;
+	private ImagesPanel imagesPanel;
+	private JButton btnReset;
+	private BufferedImage image;
 	
 	public RecognitionWin() {
 		setTitle("Handwritten Digit Recognition");
@@ -18,7 +21,13 @@ public class RecognitionWin extends JFrame {
 		setResizable(false);
 		setLayout(null);
 		
-		
+		ImagesPanel imagesPanel = new ImagesPanel();
+		JButton btnReset = new JButton("Reset");
+		btnReset.setBounds(565, 400, 100, 25);
+		btnReset.setFocusPainted(false);
+		btnReset.addActionListener(new ResetButtonListener());
+		getContentPane().add(btnReset);
+		getContentPane().add(imagesPanel);
 	}
 	
 	public void loadImage() {
@@ -29,17 +38,18 @@ public class RecognitionWin extends JFrame {
 				int color = (data[i][j])? -1 : -16777216;
 				image.setRGB(i, j, color);
 			}
-		repaint();
+		if (imagesPanel != null) imagesPanel.repaint();
 	}
 	
-	public void paint(Graphics g) {
-		if (image != null)
-			g.drawImage(image, 50, 50, this);
-		g.fillRect(379, 49, 281, 281);
-		g.setColor(Color.WHITE);
-		for (int i = 408; i < 660; i+= 28) {
-			g.drawLine(i, 50, i, 330);
-			g.drawLine(380, i - 330, 660, i - 330);
+	public BufferedImage getImage() {
+		return image;
+	}
+	
+	private class ResetButtonListener implements ActionListener {
+
+		public void actionPerformed(ActionEvent e) {
+			dispose();
+			Shared.drawWin = new DrawWin();
 		}
 		
 	}
