@@ -22,7 +22,7 @@ public class RecognitionWin extends JFrame {
 		setLayout(null);
 		
 		ImagesPanel imagesPanel = new ImagesPanel();
-		JButton btnReset = new JButton("Reset");
+		btnReset = new JButton("Reset");
 		btnReset.setBounds(565, 400, 100, 25);
 		btnReset.setFocusPainted(false);
 		btnReset.addActionListener(new ResetButtonListener());
