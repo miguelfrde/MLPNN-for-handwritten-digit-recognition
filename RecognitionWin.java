@@ -1,14 +1,17 @@
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 @SuppressWarnings("serial")
 public class RecognitionWin extends JFrame {
 
 	private JButton btnReset;
+	private JLabel lblDigit;
 	private BufferedImage image;
 	private int[] rectCoords;
 	private boolean[][] bits;
@@ -30,7 +33,11 @@ public class RecognitionWin extends JFrame {
 		btnReset.setBounds(565, 400, 100, 25);
 		btnReset.setFocusPainted(false);
 		btnReset.addActionListener(new ResetButtonListener());
+		lblDigit = new JLabel("");
+		lblDigit.setFont(new Font("Verdana", Font.PLAIN, 100));
+		lblDigit.setBounds(325, 340, 150, 100);
 		getContentPane().add(btnReset);
+		getContentPane().add(lblDigit);
 		getContentPane().add(new ImagesPanel());
 	}
 
