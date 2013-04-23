@@ -16,6 +16,9 @@ public class DrawPanel extends JPanel implements MouseMotionListener, MouseListe
 	private int px, py;
 	private boolean[][] data;
 
+	/**
+	 * Creates a panel where the user can draw.
+	 */
 	public DrawPanel() {
 		setPreferredSize(new Dimension(280, 280));
 		setBounds(10, 10, 280, 280);
@@ -29,6 +32,11 @@ public class DrawPanel extends JPanel implements MouseMotionListener, MouseListe
 		addMouseMotionListener(this);
 	}
 	
+	/**
+	 * Use this method to get a boolean array of the bits
+	 * that are drawn in the panel.
+	 * @return Boolean array of bits.
+	 */
 	public boolean[][] getData() {
 		return data;
 	}
@@ -46,11 +54,6 @@ public class DrawPanel extends JPanel implements MouseMotionListener, MouseListe
 			graphics.drawLine(x, y, x, y);
 			p = false;
 		} else if (painting) {
-			/*int xmin = Math.min(px, x), ymin = Math.min(py, y);
-			int xmax = Math.max(px, x), ymax = Math.max(py, y);
-			for (int i = xmin; i < xmax; i++)
-				for (int j = ymin; j < ymax; j++)
-					data[i][j] = true;*/
 			graphics.drawLine(px,py,x,y);
 		}
 		px = x;

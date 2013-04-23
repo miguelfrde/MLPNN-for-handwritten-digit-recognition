@@ -13,6 +13,11 @@ public class RecognitionWin extends JFrame {
 	private int[] rectCoords;
 	private boolean[][] bits;
 
+	/**
+	 * Creates a window where the image drawn in DrawPanel
+	 * is shown inside an ImagesPanel. Shows the interpreted
+	 * digit that the user drew.
+	 */
 	public RecognitionWin() {
 		setTitle("Handwritten Digit Recognition");
 		setSize(710, 480);
@@ -29,10 +34,15 @@ public class RecognitionWin extends JFrame {
 		getContentPane().add(new ImagesPanel());
 	}
 
+	/**
+	 * Gets the image data that was drawn in the DrawPanel.
+	 */
 	public void loadImage() {
 		boolean[][] data = Shared.drawPanel.getData();
 		image = new BufferedImage(280, 280, BufferedImage.TYPE_BYTE_BINARY);
-		rectCoords = new int[] {280, 280, 0, 0}; // xmin - ymin - xmax - ymax
+		
+		// Obtain the image and the rectangle that contains it
+		rectCoords = new int[] {280, 280, 0, 0}; // { xmin, ymin, xmax, ymax }
 		for (int i = 0; i < data.length; i++)
 			for (int j = 0; j < data[i].length; j++) {
 				int color = (data[i][j])? -1 : -16777216;
@@ -44,6 +54,8 @@ public class RecognitionWin extends JFrame {
 				}
 				image.setRGB(i, j, color);
 			}
+		
+		// Obtain the bits for the reduced 10x10 image
 		bits = new boolean[10][10];
 		int w = rectCoords[2] - rectCoords[0];
 		int h = rectCoords[3] - rectCoords[1];
@@ -59,18 +71,36 @@ public class RecognitionWin extends JFrame {
 		}
 	}
 
+	/**
+	 * Use it to obtain the coordinates of the renctangle that
+	 * contains the drawing.
+	 * @return Array of coordinates of the rectangle in the
+	 *         format: { xmin, ymin, xmax, ymax }.
+	 */
 	public int[] getRectangleCoords() {
 		return rectCoords;
 	}
 
+	/**
+	 * Use it to obtain the bits of the reduced 10x10 image.
+	 * @return Matrix of bits.
+	 */
 	public boolean[][] getImageBits() {
 		return bits;
 	}
 
+	/**
+	 * Use it to get the drawn image.
+	 * @return Drawn image.
+	 */
 	public BufferedImage getImage() {
 		return image;
 	}
 
+	/**
+	 * Called when the user clicks the "Reset button"
+	 * Takes back to the DrawWin.
+	 */
 	private class ResetButtonListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {

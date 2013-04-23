@@ -1,4 +1,3 @@
-
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,6 +10,10 @@ public class DrawWin extends JFrame {
 	
 	private JButton btnRecognize;
 	
+	/**
+	 * Creates a window that contains a DrawPanel
+	 * and a button to interpret the drawing.
+	 */
 	public DrawWin() {
 		setTitle("Handwritten Digit Recognition");
 		setSize(new Dimension(300, 400));
@@ -29,6 +32,10 @@ public class DrawWin extends JFrame {
 		setVisible(true);
 	}
 	
+	/**
+	 * Called when the user clicks the Recognize button.
+	 * Shows the RecognizeWin.
+	 */
 	private class RecognizeListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			dispose();
