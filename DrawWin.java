@@ -4,6 +4,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 @SuppressWarnings("serial")
 public class DrawWin extends JFrame {
@@ -16,19 +17,23 @@ public class DrawWin extends JFrame {
 	 */
 	public DrawWin() {
 		setTitle("Handwritten Digit Recognition");
-		setSize(new Dimension(300, 400));
+		setSize(new Dimension(300, 430));
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
 		setLayout(null);
 		
 		Shared.drawPanel = new DrawPanel();
+		JLabel lblWarning = new JLabel("Don't draw too fast.");
+		lblWarning.setBounds(85, 290, 150, 50);
 		btnRecognize = new JButton("Recognize");
-		btnRecognize.setBounds(100, 300, 100, 50);
+		btnRecognize.setBounds(100, 340, 100, 50);
+		btnRecognize.setFocusPainted(false);
 		btnRecognize.addActionListener(new RecognizeListener());
-
+		
 		getContentPane().add(Shared.drawPanel);
 		getContentPane().add(btnRecognize);
+		getContentPane().add(lblWarning);
 		setVisible(true);
 	}
 	
@@ -39,8 +44,8 @@ public class DrawWin extends JFrame {
 	private class RecognizeListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			dispose();
-			Shared.recognitionWin.setVisible(true);
 			Shared.recognitionWin.loadImage();
+			Shared.recognitionWin.setVisible(true);
 		}
 	}
 }
