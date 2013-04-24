@@ -3,6 +3,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -33,9 +34,9 @@ public class RecognitionWin extends JFrame {
 		btnReset.setBounds(565, 400, 100, 25);
 		btnReset.setFocusPainted(false);
 		btnReset.addActionListener(new ResetButtonListener());
-		lblDigit = new JLabel("");
+		lblDigit = new JLabel(new ImageIcon("res/loader.gif"));
 		lblDigit.setFont(new Font("Verdana", Font.PLAIN, 100));
-		lblDigit.setBounds(325, 340, 150, 100);
+		lblDigit.setBounds(280, 340, 150, 100);
 		getContentPane().add(btnReset);
 		getContentPane().add(lblDigit);
 		getContentPane().add(new ImagesPanel());
