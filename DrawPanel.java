@@ -32,6 +32,13 @@ public class DrawPanel extends JPanel implements MouseMotionListener, MouseListe
 		addMouseMotionListener(this);
 	}
 	
+	public void clear() {
+		data = new boolean[280][280];
+		getGraphics().clearRect(0, 0, 280, 280);
+		setBackground(Color.WHITE);
+		setBorder(BorderFactory.createLineBorder(Color.BLACK));
+	}
+	
 	/**
 	 * Use this method to get a boolean array of the bits
 	 * that are drawn in the panel.
