@@ -46,6 +46,7 @@ public class DrawWin extends JFrame {
 			dispose();
 			Shared.recognitionWin.loadImage();
 			Shared.recognitionWin.setVisible(true);
+			Shared.recognitionWin.recognize();
 		}
 	}
 }

@@ -37,7 +37,7 @@ public class RecognitionWin extends JFrame {
 		btnReset.addActionListener(new ResetButtonListener());
 		lblDigit = new JLabel("");
 		lblDigit.setFont(new Font("Verdana", Font.PLAIN, 100));
-		lblDigit.setBounds(280, 340, 150, 100);
+		lblDigit.setBounds(320, 340, 150, 100);
 		getContentPane().add(btnReset);
 		getContentPane().add(lblDigit);
 		getContentPane().add(new ImagesPanel());
@@ -51,6 +51,31 @@ public class RecognitionWin extends JFrame {
 		image = ImageUtils.getImage(data);
 		rectCoords = ImageUtils.getRectangle(data);
 		bits = ImageUtils.getBits(rectCoords, data);
+	}
+	
+	public void recognize() {
+		boolean[][] booleanBits = Shared.recognitionWin.getImageBits();
+		int[] intBits = new int[100];
+		for (int i = 0; i < 10; i++)
+			for (int j = 0; j < 10; j++)
+				intBits[10*i + j] = (booleanBits[i][j])? 1 : 0;
+		double y = Shared.neuralNet.eval(intBits);
+		lblDigit.setText(getLetter(y) + "");
+	}
+	
+	private char getLetter(double y) {
+		double E = 0.01;
+		if (Math.abs(y - Shared.getDigit(0)) <= E) return '0';
+		if (Math.abs(y - Shared.getDigit(1)) <= E) return '1';
+		if (Math.abs(y - Shared.getDigit(2)) <= E) return '2';
+		if (Math.abs(y - Shared.getDigit(3)) <= E) return '3';
+		if (Math.abs(y - Shared.getDigit(4)) <= E) return '4';
+		if (Math.abs(y - Shared.getDigit(5)) <= E) return '5';
+		if (Math.abs(y - Shared.getDigit(6)) <= E) return '6';
+		if (Math.abs(y - Shared.getDigit(7)) <= E) return '7';
+		if (Math.abs(y - Shared.getDigit(8)) <= E) return '8';
+		if (Math.abs(y - Shared.getDigit(9)) <= E) return '9';
+		return '?';
 	}
 
 	/**
