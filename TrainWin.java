@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -41,7 +40,6 @@ public class TrainWin extends JFrame implements WindowListener {
 	private NeuralNetwork nn;
 	private int[][] trainPatterns;
 	private double[] expectedOutputs;
-	private HashMap<Integer, Double> digits;
 	private int N;
 
 	public TrainWin() {
@@ -63,7 +61,6 @@ public class TrainWin extends JFrame implements WindowListener {
 			cbDigit.addItem(i);
 		cbDigit.setBounds(60, 300, 80, 30);
 
-		createMap();
 		createRightSide();
 		loadWriteFile();
 
@@ -72,20 +69,6 @@ public class TrainWin extends JFrame implements WindowListener {
 		getContentPane().add(btnSave);
 		getContentPane().add(cbDigit);
 		setVisible(true);
-	}
-
-	private void createMap() {
-		digits = new HashMap<Integer, Double>();
-		digits.put(0, 0.7);
-		digits.put(1, 0.1);
-		digits.put(2, 0.4);
-		digits.put(3, 0.6);
-		digits.put(4, 0.3);
-		digits.put(5, 0.5);
-		digits.put(6, 0.8);
-		digits.put(7, 0.2);
-		digits.put(8, 1.0);
-		digits.put(9, 0.9);
 	}
 
 	private void createRightSide() {
@@ -156,7 +139,7 @@ public class TrainWin extends JFrame implements WindowListener {
 				for (int i = 0; i < 10; i++)
 					for (int j = 0; j < 10; j++)
 						trainDataFile.write((data[i][j])? "1 " : "0 ");
-				trainDataFile.write(digits.get(cbDigit.getSelectedItem()) + "\n");
+				trainDataFile.write(Shared.getDigit((Integer)cbDigit.getSelectedItem()) + "\n");
 				N++;
 				drawPanel.clear();
 			} catch (IOException e1) { e1.printStackTrace(); }
