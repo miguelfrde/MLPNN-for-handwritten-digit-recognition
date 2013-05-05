@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Scanner;
 
 
@@ -11,16 +12,15 @@ import java.util.Scanner;
 
 public class NeuralNetwork {
 
-	private final int hiddenSize;
-	private final int inputSize;
+	private int hiddenSize;
+	private int inputSize;
 	private double[][] weightsItoH;
 	private double[] weightsHtoO;
 	private double[] ah;
 	private double[] ai;
-	private final double LEARNING_RATE;
+	private double LEARNING_RATE;
 	private static final double E = 0.01;
 
-	
 	/**
 	 * Creates a MLPNN with specified input layer size, hidden
 	 * layer size and an output layers size of 1. This neural network
@@ -31,22 +31,68 @@ public class NeuralNetwork {
 	 * @param hiddenSize	Size of the hidden layer.
 	 */
 	public NeuralNetwork(double learningRate, int inputSize, int hiddenSize) {
-		this.LEARNING_RATE = learningRate;
-		this.inputSize   = inputSize + 1;
-		this.hiddenSize  = hiddenSize + 1;
+		defaultInit(learningRate, inputSize, hiddenSize);
+	}
+
+	/**
+	 * Creates a MLPNN using the LR, layer sizes and weights
+	 * specified in a file.	
+	 * @param filename					Name of the file where the LR, layer.
+	 * 									sizes and weights are saved.
+	 * @param defLr						Default learning rate to use if an error occurs.
+	 * @param defInSize					Default input layer size to use if an error occurs.
+	 * @param defHiSize					Default hidden layer size to use if an error occurs.
+	 * @throws FileNotFoundException	Thrown if the file is not found.
+	 */
+	public NeuralNetwork(String filename, double defLr, int defInSize, int defHiSize)
+			throws FileNotFoundException {
+		File file = new File(filename);
+		Scanner in = new Scanner(file);
+		try {
+			this.LEARNING_RATE = in.nextDouble();
+			this.inputSize     = in.nextInt();
+			this.hiddenSize    = in.nextInt();
+		} catch (Exception e) {
+			in.close();
+			defaultInit(defLr, defInSize, defHiSize);
+			return;
+		}
+		init();
+		loadWeights(in, this.LEARNING_RATE, this.inputSize, this.hiddenSize);
+		in.close();
+	}
+
+	/**
+	 * Initialize attributes.
+	 */
+	private void init() {
 		this.weightsItoH = new double[this.inputSize][this.hiddenSize];
 		this.weightsHtoO = new double[this.hiddenSize];
 		this.ai 		 = new double[this.inputSize];
 		this.ah 		 = new double[this.hiddenSize];
-		randomizeWeights();
-		ah[hiddenSize] = 1.0; // Bias units
-		ai[inputSize]  = 1.0;
+		ah[this.hiddenSize - 1]   = 1.0; // Bias units
+		ai[this.inputSize  - 1]   = 1.0;
 	}
 	
 	/**
+	 * Default attributes initialization.
+	 * @param learningRate	Value of the learning rate to be used in
+	 * 						backpropagation.
+	 * @param inputSize		Size of the input layer.
+	 * @param hiddenSize	Size of the hidden layer.
+	 */
+	private void defaultInit(double learningRate, int inputSize, int hiddenSize) {
+		this.LEARNING_RATE = learningRate;
+		this.inputSize   = inputSize + 1;
+		this.hiddenSize  = hiddenSize + 1;
+		init();
+		randomizeWeights();
+	}
+
+	/**
 	 * Use this method to load the weights from a file.
 	 * Expected file format:
-	 * 		Learning rate <space> Input size <space> Hidden size
+	 * 		Learning rate <space> Input size <space> Hidden size.
 	 * 		All weights from input layer to hidden layer.
 	 * 		All weights from hidden layer to output layer.
 	 * If the file format is wrong or its data is wrong,
@@ -58,25 +104,34 @@ public class NeuralNetwork {
 		try {
 			Scanner in = new Scanner(new File(filename));
 			double lr = in.nextDouble();
-			double inSize = in.nextInt();
-			double hiSize = in.nextInt();
-			if (lr != LEARNING_RATE || inputSize != inSize || hiSize != hiddenSize) {
-				in.close();
-				randomizeWeights();
-				return;
-			}
-			for (int i = 0; i < inputSize; i++)
-				for (int j = 0; j < hiddenSize; j++)
-					weightsItoH[i][j] = in.nextDouble();
-			for (int j = 0; j < hiddenSize; j++)
-				weightsHtoO[j] = in.nextDouble();
+			int inSize = in.nextInt();
+			int hiSize = in.nextInt();
+			loadWeights(in, lr, inSize, hiSize);
 			in.close();
 		} catch (Exception e) {
-			e.printStackTrace();
 			randomizeWeights();
 		}
 	}
-	
+
+	/**
+	 * Loads weights.
+	 * @param in		Scanner of file where weights are contained.
+	 * @param lr		Learning rate.
+	 * @param inSize	Input layer size.
+	 * @param hiSize	Hidden layer size.
+	 */
+	private void loadWeights(Scanner in, double lr, int inSize, int hiSize) {
+		if (lr != LEARNING_RATE || inputSize != inSize || hiSize != hiddenSize) {
+			randomizeWeights();
+			return;
+		}
+		for (int i = 0; i < inputSize; i++)
+			for (int j = 0; j < hiddenSize; j++)
+				weightsItoH[i][j] = in.nextDouble();
+		for (int j = 0; j < hiddenSize; j++)
+			weightsHtoO[j] = in.nextDouble();
+	}
+
 	/**
 	 * Use this method to load the weights from a file.
 	 * Output file format:
@@ -96,7 +151,7 @@ public class NeuralNetwork {
 			f.write(String.format("%f\n", weightsHtoO[j]));
 		f.close();
 	}
-	
+
 	/**
 	 * Use this method to set all weights to random.
 	 */
@@ -127,7 +182,7 @@ public class NeuralNetwork {
 		//return y * (1 - y);
 		return 1 - y*y;
 	}
-	
+
 	/**
 	 * Return a random number between a and b.
 	 * @param a	Lower bound.
@@ -137,7 +192,7 @@ public class NeuralNetwork {
 	private double rand(double a, double b) {
 		return a + (b - a) * Math.random();
 	}
-	
+
 	/**
 	 * Perform forward propagtion through the NN.
 	 * @param inputs	Activation values for input layer.
@@ -166,17 +221,17 @@ public class NeuralNetwork {
 	 */
 	private void backPropagation(double error, double output) {
 		double deltak = dSigmoid(output) * error;
-		
+
 		// Compute delta for hidden layer neurons
 		double[] deltaj = new double[hiddenSize];
 		for (int j = 0; j < hiddenSize; j++)
 			deltaj[j] = dSigmoid(ah[j]) * deltak * weightsHtoO[j];
-		
+
 		// Update weights from input to hidden layer
 		for (int i = 0; i < inputSize; i++)
 			for (int j = 0; j < hiddenSize; j++)
 				weightsItoH[i][j] += LEARNING_RATE * deltaj[j] * ai[i];
-	
+
 		// Update weights from hidden to output layer
 		for (int j = 0; j < hiddenSize; j++)
 			weightsHtoO[j] += LEARNING_RATE * deltak * ah[j];
@@ -205,6 +260,15 @@ public class NeuralNetwork {
 			iters++;
 		}
 		return iters;
+	}
+	
+	/**
+	 * Run the neural network with pattern as input.
+	 * @param pattern	Input pattern.
+	 * @return			Output layer neuron activation value.
+	 */
+	public double eval(int[] pattern) {
+		return forwardPropagation(pattern);
 	}
 
 	/**
@@ -247,6 +311,13 @@ public class NeuralNetwork {
 		NeuralNetwork nn = new NeuralNetwork(0.5, 2, 2);
 		System.out.println(nn.train(inputs, outputs, 10000));
 		nn.test(inputs, outputs, true);
+	}
+	
+	public String toString() {
+		String s = "Weights I->H = " + Arrays.deepToString(weightsItoH);
+		s += "\nWeights H->O = " + Arrays.toString(weightsHtoO);
+		s += "\nLearning Rate = " + LEARNING_RATE;
+		return s;
 	}
 
 }
