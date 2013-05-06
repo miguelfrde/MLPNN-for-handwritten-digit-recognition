@@ -138,7 +138,7 @@ public class TrainWin extends JFrame implements WindowListener {
 				data = ImageUtils.getBits(ImageUtils.getRectangle(data), data);
 				for (int i = 0; i < 10; i++)
 					for (int j = 0; j < 10; j++)
-						trainDataFile.write((data[i][j])? "1 " : "0 ");
+						trainDataFile.write((data[j][i])? "1 " : "0 ");
 				trainDataFile.write(Shared.getDigit((Integer)cbDigit.getSelectedItem()) + "\n");
 				N++;
 				drawPanel.clear();

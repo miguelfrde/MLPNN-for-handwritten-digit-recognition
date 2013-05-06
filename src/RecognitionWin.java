@@ -58,7 +58,7 @@ public class RecognitionWin extends JFrame {
 		int[] intBits = new int[100];
 		for (int i = 0; i < 10; i++)
 			for (int j = 0; j < 10; j++)
-				intBits[10*i + j] = (booleanBits[i][j])? 1 : 0;
+				intBits[10*i + j] = (booleanBits[j][i])? 1 : 0;
 		double y = Shared.neuralNet.eval(intBits);
 		lblDigit.setText(getLetter(y) + "");
 	}
