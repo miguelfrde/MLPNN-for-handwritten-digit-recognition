@@ -32,7 +32,7 @@ public class ImagesPanel extends JPanel {
 		if (rCoords != null) {
 			g.setColor(Color.RED);
 			g.drawRect(rCoords[0] - 1, rCoords[1] - 1,
-				rCoords[2] - rCoords[0] + 1, rCoords[3] - rCoords[1] + 2);	
+				rCoords[2] - rCoords[0] + 2, rCoords[3] - rCoords[1] + 2);	
 		}
 		
 		// Paint binarized image grid
