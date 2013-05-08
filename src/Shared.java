@@ -1,6 +1,5 @@
 import java.util.HashMap;
 
-import neuralnetwork.NeuralNetwork;
 
 
 

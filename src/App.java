@@ -1,6 +1,5 @@
 import java.io.FileNotFoundException;
 
-import neuralnetwork.NeuralNetwork;
 
 
 public class App {

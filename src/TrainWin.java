@@ -18,8 +18,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-import neuralnetwork.NeuralNetwork;
-import utils.ImageUtils;
 
 @SuppressWarnings("serial")
 public class TrainWin extends JFrame implements WindowListener {
