@@ -2,12 +2,12 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-import utils.ImageUtils;
 
 @SuppressWarnings("serial")
 public class RecognitionWin extends JFrame {
@@ -58,13 +58,15 @@ public class RecognitionWin extends JFrame {
 		int[] intBits = new int[100];
 		for (int i = 0; i < 10; i++)
 			for (int j = 0; j < 10; j++)
-				intBits[10*i + j] = (booleanBits[j][i])? 1 : 0;
+				intBits[10*j + i] = (booleanBits[i][j])? 1 : 0;
 		double y = Shared.neuralNet.eval(intBits);
+		System.out.println(Arrays.toString(intBits));
+		System.out.println(y);
 		lblDigit.setText(getLetter(y) + "");
 	}
 	
 	private char getLetter(double y) {
-		double E = 0.01;
+		double E = 0.049;
 		if (Math.abs(y - Shared.getDigit(0)) <= E) return '0';
 		if (Math.abs(y - Shared.getDigit(1)) <= E) return '1';
 		if (Math.abs(y - Shared.getDigit(2)) <= E) return '2';
