@@ -37,7 +37,7 @@ public class TrainWin extends JFrame implements WindowListener {
 	private FileWriter trainDataFile;
 	private NeuralNetwork nn;
 	private int[][] trainPatterns;
-	private double[] expectedOutputs;
+	private int[][] expectedOutputs;
 	private int N;
 
 	public TrainWin() {
@@ -137,7 +137,7 @@ public class TrainWin extends JFrame implements WindowListener {
 				for (int i = 0; i < 10; i++)
 					for (int j = 0; j < 10; j++)
 						trainDataFile.write((data[j][i])? "1 " : "0 ");
-				trainDataFile.write(Shared.getDigit((Integer)cbDigit.getSelectedItem()) + "\n");
+				trainDataFile.write(Shared.getBinary((Integer)cbDigit.getSelectedItem()) + "\n");
 				N++;
 				drawPanel.clear();
 			} catch (IOException e1) { e1.printStackTrace(); }
@@ -162,13 +162,13 @@ public class TrainWin extends JFrame implements WindowListener {
 					else {
 						double lr = Double.parseDouble(txtLearningRate.getText());
 						int hn = Integer.parseInt(txtHLNeurons.getText());
-						nn = new NeuralNetwork(lr, 100, hn);
+						nn = new NeuralNetwork(lr, 100, hn, 10);
 						try {
 							nn.loadWeights("res/nn_weights.txt");
 							saveLastData();
 							loadTrainPatterns();
-							int iters = nn.train(trainPatterns, expectedOutputs, Integer.parseInt(txtIterLimit.getText()));
-							lblIters.setText(iters + "");
+							nn.train(trainPatterns, expectedOutputs, Integer.parseInt(txtIterLimit.getText()));
+							lblIters.setText(nn.iters() + "");
 							double[] r = nn.test(trainPatterns, expectedOutputs, false);
 							lblSuccess.setText(String.format("%.2f%%", r[0] * 100));
 							nn.saveWeights("res/nn_weights.txt");
@@ -189,11 +189,12 @@ public class TrainWin extends JFrame implements WindowListener {
 			int N = in.nextInt();
 			int size = in.nextInt();
 			trainPatterns = new int[N][size];
-			expectedOutputs = new double[N];
+			expectedOutputs = new int[N][10];
 			for (int i = 0; i < N; i++) {
 				for (int j = 0; j < size; j++)
 					trainPatterns[i][j] = in.nextInt();
-				expectedOutputs[i] = in.nextDouble();
+				for (int j = 0; j < 10; j++)
+					expectedOutputs[i][j] = in.nextInt();
 			}
 			in.close();
 		} catch (FileNotFoundException e) {e.printStackTrace();}
@@ -222,7 +223,10 @@ public class TrainWin extends JFrame implements WindowListener {
 			for (int i = 0; i < N; i++) {
 				for (int j = 0; j < 100; j++)
 					tmpFileOut.write(in.nextInt() + " ");
-				tmpFileOut.write(in.nextDouble() + "\n");
+				tmpFileOut.write("\n");
+				for (int j = 0; j < 10; j++)
+					tmpFileOut.write(in.nextInt() + " ");
+				tmpFileOut.write("\n");
 			}
 			tmpFileOut.close();
 			in.close();

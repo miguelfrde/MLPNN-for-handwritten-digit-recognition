@@ -1,31 +1,29 @@
 import java.util.HashMap;
 
 
-
-
 public class Shared {
 	public static DrawWin drawWin;
 	public static DrawPanel drawPanel;
 	public static RecognitionWin recognitionWin;
 	public static NeuralNetwork neuralNet;
-	private static final HashMap<Integer, Double> digits;
+	private static HashMap<Integer, String> binary;
 	
 	static {
-		digits = new HashMap<Integer, Double>();
-		digits.put(0, 0.7);
-		digits.put(1, 0.1);
-		digits.put(2, 0.4);
-		digits.put(3, 0.6);
-		digits.put(4, 0.3);
-		digits.put(5, 0.5);
-		digits.put(6, 0.8);
-		digits.put(7, 0.2);
-		digits.put(8, 1.0);
-		digits.put(9, 0.9);
+		binary = new HashMap<Integer, String>();
+		binary.put(0, "1 0 0 0 0 0 0 0 0 0");
+		binary.put(1, "0 1 0 0 0 0 0 0 0 0");
+		binary.put(2, "0 0 1 0 0 0 0 0 0 0");
+		binary.put(3, "0 0 0 1 0 0 0 0 0 0");
+		binary.put(4, "0 0 0 0 1 0 0 0 0 0");
+		binary.put(5, "0 0 0 0 0 1 0 0 0 0");
+		binary.put(6, "0 0 0 0 0 0 1 0 0 0");
+		binary.put(7, "0 0 0 0 0 0 0 1 0 0");
+		binary.put(8, "0 0 0 0 0 0 0 0 1 0");
+		binary.put(9, "0 0 0 0 0 0 0 0 0 1");
 	}
 	
-	public static double getDigit(int d) {
-		return digits.get(d);
+	public static String getBinary(int n) {
+		return binary.get(n);
 	}
 	
 }

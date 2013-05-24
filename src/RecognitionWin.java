@@ -2,7 +2,6 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.util.Arrays;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -59,25 +58,8 @@ public class RecognitionWin extends JFrame {
 		for (int i = 0; i < 10; i++)
 			for (int j = 0; j < 10; j++)
 				intBits[10*j + i] = (booleanBits[i][j])? 1 : 0;
-		double y = Shared.neuralNet.eval(intBits);
-		System.out.println(Arrays.toString(intBits));
-		System.out.println(y);
-		lblDigit.setText(getLetter(y) + "");
-	}
-	
-	private char getLetter(double y) {
-		double E = 0.049;
-		if (Math.abs(y - Shared.getDigit(0)) <= E) return '0';
-		if (Math.abs(y - Shared.getDigit(1)) <= E) return '1';
-		if (Math.abs(y - Shared.getDigit(2)) <= E) return '2';
-		if (Math.abs(y - Shared.getDigit(3)) <= E) return '3';
-		if (Math.abs(y - Shared.getDigit(4)) <= E) return '4';
-		if (Math.abs(y - Shared.getDigit(5)) <= E) return '5';
-		if (Math.abs(y - Shared.getDigit(6)) <= E) return '6';
-		if (Math.abs(y - Shared.getDigit(7)) <= E) return '7';
-		if (Math.abs(y - Shared.getDigit(8)) <= E) return '8';
-		if (Math.abs(y - Shared.getDigit(9)) <= E) return '9';
-		return '?';
+		int y = Shared.neuralNet.eval(intBits);
+		lblDigit.setText(y + "");
 	}
 
 	/**
