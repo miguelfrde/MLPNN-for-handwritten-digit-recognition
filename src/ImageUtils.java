@@ -27,6 +27,29 @@ public class ImageUtils {
 		return rectCoords;
 	}
 	
+	public static int[] getSquare(boolean[][] data) {
+		int[] rectCoords = new int[] {280, 280, 0, 0}; // { xmin, ymin, xmax, ymax }
+		for (int i = 0; i < data.length; i++)
+			for (int j = 0; j < data[i].length; j++)
+				if (data[i][j]) {
+					if (i < rectCoords[0]) rectCoords[0] = i;
+					if (j < rectCoords[1]) rectCoords[1] = j;
+					if (i > rectCoords[2]) rectCoords[2] = i;
+					if (j > rectCoords[3]) rectCoords[3] = j;
+				}
+		
+		int sqrlen = rectCoords[3] - rectCoords[2] - rectCoords[1] + rectCoords[0]; 
+		if (sqrlen > 0) {
+			rectCoords[2] += sqrlen / 2;
+			rectCoords[0] -= sqrlen / 2;
+		} else {
+			rectCoords[3] -= sqrlen / 2;
+			rectCoords[1] += sqrlen / 2;
+		}
+		
+		return rectCoords;
+	}
+
 	public static boolean[][] getBits(int[] rectCoords, boolean[][] data) {
 		boolean bits[][] = new boolean[10][10];
 		int w = rectCoords[2] - rectCoords[0];
