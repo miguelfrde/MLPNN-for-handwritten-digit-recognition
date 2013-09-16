@@ -48,7 +48,8 @@ public class RecognitionWin extends JFrame {
 	public void loadImage() {
 		boolean[][] data = Shared.drawPanel.getData();
 		image = ImageUtils.getImage(data);
-		rectCoords = ImageUtils.getRectangle(data);
+		//rectCoords = ImageUtils.getRectangle(data);
+		rectCoords = ImageUtils.getSquare(data);
 		bits = ImageUtils.getBits(rectCoords, data);
 	}
 	

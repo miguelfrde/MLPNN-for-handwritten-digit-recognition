@@ -133,7 +133,8 @@ public class TrainWin extends JFrame implements WindowListener {
 		public void actionPerformed(ActionEvent e) {
 			try {
 				boolean[][] data = drawPanel.getData();
-				data = ImageUtils.getBits(ImageUtils.getRectangle(data), data);
+				//data = ImageUtils.getBits(ImageUtils.getRectangle(data), data);
+				data = ImageUtils.getBits(ImageUtils.getSquare(data), data);
 				for (int i = 0; i < 10; i++)
 					for (int j = 0; j < 10; j++)
 						trainDataFile.write((data[j][i])? "1 " : "0 ");
